@@ -119,5 +119,3 @@ def scrape_mars():
     
     # Return results
     return scrape_result
-
-print(scrape_mars())

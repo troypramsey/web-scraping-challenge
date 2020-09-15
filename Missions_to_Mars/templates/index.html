@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <title>Mars Scraping Challenge</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="jumbotron text-center">
+          <h1>Mission to Mars</h1>
+          <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
+        </div>
+        {% if mars %}
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    {{ mars.news_title }}
+                </h3>
+                <p>
+                    {{ mars.news_paragraph }}
+                </p>
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3>
+                            Featured Mars Image
+                        </h3><img alt="Bootstrap Image Preview" src={{ mars.jpl }} />
+                    </div>
+                    <div class="col-md-4">
+                        <h3>
+                            Mars Facts
+                        </h3>
+                        {{ mars.mars_table }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        </div>
+    {% endif %}
+      </div>
+    
+</body>
+</html>
