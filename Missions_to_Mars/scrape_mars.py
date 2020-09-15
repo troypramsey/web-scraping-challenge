@@ -4,13 +4,18 @@ from bs4 import BeautifulSoup as bs
 import time
 import pandas as pd
 
+# Configure browser
+def init_browser():
+    # @NOTE: Replace the path with your actual path to the chromedriver
+    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+    return Browser("chrome", **executable_path, headless=False)
+
 # SCRAPE FUNCTION
 def scrape_mars():
     
-    scrape_result = {}
-    
-    # Initialize browser object
-    browser = init_browser()
+    # Configure browser
+    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+    browser = Browser("chrome", **executable_path, headless=False)
     
     # -----------
     # Scrape news
@@ -32,15 +37,9 @@ def scrape_mars():
 
     # Scrape slide text
     news_preview  = news_slide.find('div', class_='article_teaser_body').get_text()
-
-    # Store data in a dictionary
-    news_data = {
-
-        "title": news_title,
-        "content": news_preview
-    }
     
-    scrape_result['news'] = news_data
+    scrape_result = {'news_title': news_title, 'news_paragraph': news_preview}
+
     
     # -----------
     # Scrape JPL
@@ -66,13 +65,16 @@ def scrape_mars():
     # Scrape Space Facts Table
     # ------------------------
     
+    # Visit site
+    url = 'https://space-facts.com/mars/'
+    
     # Use Pandas html function to scrape Space Facts table
     df = pd.read_html(url)[0]
 
     # Convert dataframe back into html
     page_table = df.to_html()
     
-    scrape_result['fact_table'] = page_table
+    scrape_result['mars_table'] = page_table
     
     # --------------------------
     # Scrape Astrogeology Images
@@ -101,24 +103,21 @@ def scrape_mars():
     searches = [base_url + item for item in link_list]
     
     # Create list of dictionaries
-    dictionary_list = []
     for link in searches:
-        dictionary = {}
         browser.visit(link)
         html = browser.html
         soup = bs(html, "html.parser")
-        img_url = soup.find('img', class_='wide-image')['src']
+        img_url = base_url + soup.find('img', class_='wide-image')['src']
         raw_title = soup.find('h2', class_='title').text.split()
-        title = " ".join(raw_title[:-1])
-        dictionary['title'] = title
-        dictionary['img_url'] = base_url + img_url
-        dictionary_list.append(dictionary)
+        title = "_".join(raw_title[:-1]).lower()
+        scrape_result[title] = img_url
         browser.back()
         
-    scrape_result['astrogeo'] = dictionary_list
         
     # Close browser
     browser.quit()
     
     # Return results
     return scrape_result
+
+print(scrape_mars())
