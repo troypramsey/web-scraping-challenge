@@ -29,6 +29,9 @@ def scrape_mars():
     html = browser.html
     soup = bs(html, "html.parser")
     
+    time.sleep(1)
+
+    
     # Find news slide
     news_slide = soup.find('li', class_='slide')
 
