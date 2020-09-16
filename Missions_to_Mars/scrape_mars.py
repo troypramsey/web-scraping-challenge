@@ -4,11 +4,6 @@ from bs4 import BeautifulSoup as bs
 import time
 import pandas as pd
 
-# Configure browser
-def init_browser():
-    # @NOTE: Replace the path with your actual path to the chromedriver
-    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
-    return Browser("chrome", **executable_path, headless=False)
 
 # SCRAPE FUNCTION
 def scrape_mars():
@@ -106,15 +101,17 @@ def scrape_mars():
     searches = [base_url + item for item in link_list]
     
     # Create list of dictionaries
+    hemispheres = []
     for link in searches:
         browser.visit(link)
         html = browser.html
         soup = bs(html, "html.parser")
         img_url = base_url + soup.find('img', class_='wide-image')['src']
         raw_title = soup.find('h2', class_='title').text.split()
-        title = "_".join(raw_title[:-1]).lower()
-        scrape_result[title] = img_url
-        browser.back()
+        title = " ".join(raw_title[:-1])
+        hemispheres.append({'title': title, 'img_url': img_url})
+    
+    scrape_result['hemispheres'] = hemispheres
         
         
     # Close browser
