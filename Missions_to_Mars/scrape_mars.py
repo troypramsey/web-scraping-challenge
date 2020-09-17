@@ -10,7 +10,7 @@ def scrape_mars():
     
     # Configure browser
     executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
-    browser = Browser("chrome", **executable_path, headless=False)
+    browser = Browser("chrome", **executable_path, headless=True)
     
     # -----------
     # Scrape news
