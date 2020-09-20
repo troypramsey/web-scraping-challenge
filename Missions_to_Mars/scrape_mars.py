@@ -31,10 +31,10 @@ def scrape_mars():
     news_slide = soup.find('li', class_='slide')
 
     # Scrape slide title
-    news_title = news_slide.find('div', class_='content_title').get_text()
+    news_title = news_slide.find('div', class_='content_title').text
 
     # Scrape slide text
-    news_preview  = news_slide.find('div', class_='article_teaser_body').get_text()
+    news_preview  = news_slide.find('div', class_='article_teaser_body').text
     
     scrape_result = {'news_title': news_title, 'news_paragraph': news_preview}
 
@@ -70,7 +70,7 @@ def scrape_mars():
     df = pd.read_html(url)[0]
 
     # Convert dataframe back into html
-    page_table = df.to_html()
+    page_table = df.to_html(index=False, header=False)
     
     scrape_result['mars_table'] = page_table
     
